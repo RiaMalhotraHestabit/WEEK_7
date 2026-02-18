@@ -1,0 +1,15 @@
+# Virtual Environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Data & Vector DB
+src/data/
+*.npy
+*.faiss
+
+# OS files
+.DS_Store
