@@ -6,6 +6,18 @@ def load_pdf(file_path: str):
     documents = []
 
     reader = PdfReader(file_path)
+    filename = os.path.basename(file_path)
+    year = None
+    for y in ["2020", "2021", "2022", "2023", "2024"]:
+        if y in filename:
+            year = y
+            break
+
+    if year is None:
+        year = "2023"  # fallback default
+
+    # You can customize type detection logic later
+    doc_type = "proxy_statement"
     for page_number, page in enumerate(reader.pages):
         text = page.extract_text()
         if text:
@@ -13,7 +25,9 @@ def load_pdf(file_path: str):
                 "text": text,
                 "metadata": {
                     "source": os.path.basename(file_path),
-                    "page": page_number + 1
+                    "page": page_number + 1,
+                    "year": year,
+                    "type": doc_type
                 }
             })
 
