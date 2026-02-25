@@ -1,4 +1,5 @@
 import os
+import re
 import sqlite3
 from dotenv import load_dotenv
 from google import genai
@@ -10,16 +11,19 @@ load_dotenv()
 DB_PATH = "src/data/raw/customers.db"
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-MODEL_NAME = "models/gemini-2.0-flash-lite"
+MODEL_NAME = "models/gemini-2.5-flash"
 
 def validate_sql(sql: str) -> bool:
-    forbidden_keywords = ["DROP", "DELETE", "INSERT", "UPDATE", "ALTER"]
-    if not sql.strip().lower().startswith("select"):
+    sql = sql.strip().lower()
+
+    # Must start with SELECT
+    if not re.match(r"^select\b", sql):
         return False
 
-    for word in forbidden_keywords:
-        if word in sql.upper():
-            return False
+    # Block dangerous operations
+    forbidden_keywords = ["drop", "delete", "insert", "update", "alter"]
+    if any(word in sql for word in forbidden_keywords):
+        return False
 
     return True
 

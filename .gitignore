@@ -13,3 +13,4 @@ src/data/
 
 # OS files
 .DS_Store
+.env

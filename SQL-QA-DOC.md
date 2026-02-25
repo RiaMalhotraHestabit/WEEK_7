@@ -44,9 +44,5 @@ Orchestrates:
 - No query cost optimization
 
 ---
-
-## Future Improvements
-- Add multi-table support
-- Add SQL parsing validation
-- Add caching
-- Add PostgreSQL support
+**output**
+![SQL-QA-output](screenshots/day4/sql_QA_output.png)
