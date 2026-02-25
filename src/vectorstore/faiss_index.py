@@ -1,7 +1,6 @@
+# src/vectorstore/faiss_index.py
 import faiss
-import numpy as np
 import os
-
 
 def build_faiss_index(embeddings, save_path):
     dimension = embeddings.shape[1]
@@ -14,6 +13,9 @@ def build_faiss_index(embeddings, save_path):
 
     return index
 
-
 def load_faiss_index(index_path):
     return faiss.read_index(index_path)
+
+def search_faiss_index(index, query_vector, top_k=5):
+    distances, indices = index.search(query_vector, top_k)
+    return distances, indices

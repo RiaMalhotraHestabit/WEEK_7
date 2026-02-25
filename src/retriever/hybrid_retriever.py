@@ -94,6 +94,24 @@ class HybridRetriever:
                 final.append(chunk)
 
         return final[: self.top_k]
+    
+# ---------------- Capstone helper ----------------
+def query_hybrid_text(query, top_k=5, filters=None):
+    """
+    Helper function for Capstone text RAG.
+    Returns {"answer": str, "confidence": float}
+    """
+    retriever = HybridRetriever(top_k=top_k)
+    results = retriever.retrieve(query, filters)
+
+    if not results:
+        return {"answer": "No relevant documents found.", "confidence": 0.0}
+
+    # Concatenate top chunks
+    answer = " ".join([chunk["text"] for chunk in results])
+    # Simple confidence heuristic: normalized number of retrieved chunks
+    confidence = min(1.0, len(results)/top_k)
+    return {"answer": answer, "confidence": confidence}
 
 if __name__ == "__main__":
     retriever = HybridRetriever(top_k=5)

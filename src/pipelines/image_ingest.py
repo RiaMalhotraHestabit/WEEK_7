@@ -99,6 +99,43 @@ class ImageIngestionPipeline:
 
         print(f"\nDone! Total in store: {self.collection.count()}")
 
+#----for capstone project----
+
+def query_image(file_path, top_k=5):
+    """
+    Capstone helper for /ask-image
+    """
+    pipeline = ImageIngestionPipeline(vector_store_dir="vectorstore")
+
+    # Embed input image
+    embedding = pipeline.embedder.embed_image(file_path)
+
+    # Query ChromaDB
+    results = pipeline.collection.query(
+        query_embeddings=[embedding.tolist()],
+        n_results=top_k,
+        include=['documents','metadatas','distances']
+    )
+
+    docs = results['documents'][0]
+    metadatas = results['metadatas'][0]
+    distances = results['distances'][0]
+
+    if not docs:
+        return {"answer": "No similar images found.", "confidence": 0.0}
+
+    # Concatenate captions + OCR
+    answer_texts = []
+    for meta in metadatas:
+        text = f"Caption: {meta.get('caption','')}\nOCR: {meta.get('ocr_text','')}"
+        answer_texts.append(text)
+
+    answer = "\n\n".join(answer_texts)
+    # Simple confidence heuristic: inverse of average distance (normalized)
+    confidence = float(max(0.0, 1.0 - sum(distances)/len(distances)))
+
+    return {"answer": answer, "confidence": confidence}
+
 if __name__ == "__main__":
     pipeline = ImageIngestionPipeline(vector_store_dir="vectorstore")
     pipeline.ingest_directory("src/data/raw/images")
