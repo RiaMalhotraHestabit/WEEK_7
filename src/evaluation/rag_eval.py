@@ -1,4 +1,3 @@
-# /evaluation/rag_eval.py
 import os
 import json
 from retriever.hybrid_retriever import query_hybrid_text
@@ -11,7 +10,6 @@ if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w") as f:
         json.dump([], f, indent=2)
 
-# ----------------- Test Cases -----------------
 test_cases = [
     {
         "mode": "Text",
@@ -62,7 +60,7 @@ def run_tests():
     with open(LOG_FILE, "w") as f:
         json.dump(results, f, indent=2)
 
-    print("\n✅ Evaluation complete. Results saved to EVAL-LOGS.json")
+    print("\n Evaluation complete. Results saved to EVAL-LOGS.json")
 
 if __name__ == "__main__":
     run_tests()

@@ -1,4 +1,3 @@
-# /deployment/app.py
 import os
 import json
 from datetime import datetime
@@ -11,14 +10,11 @@ from retriever.hybrid_retriever import query_hybrid_text
 from pipelines.image_ingest import query_image
 from pipelines.sql_pipeline import query_sql
 
-# ----------------- Setup -----------------
+# -- Setup ---
 st.set_page_config(page_title="Capstone RAG System", layout="wide")
 st.title("📚 Capstone RAG System")
-
-# Memory store for last 5 messages
 memory = MemoryStore(max_len=5)
 
-# Chat logs file
 LOG_FILE = "CHAT-LOGS.json"
 if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w") as f:
@@ -40,14 +36,8 @@ def log_interaction(query, answer, confidence, mode):
         json.dump(logs, f, indent=2)
 
 def refine_answer(answer, confidence, history):
-    """
-    Simple refinement loop:
-    - If confidence < 0.5, append last user/assistant history
-    - Returns same answer for now, can extend with LLM in future
-    """
     if confidence < 0.5:
         context = "\n".join([f"{m['role']}: {m['content']}" for m in history])
-        # For now just note low confidence; can call LLM to improve answer
         answer += f"\n\n(Note: confidence was low, context included.)\n{context}"
         confidence = min(confidence + 0.2, 1.0)
     return answer, confidence

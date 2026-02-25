@@ -1,4 +1,3 @@
-# src/vectorstore/faiss_index.py
 import faiss
 import os
 
