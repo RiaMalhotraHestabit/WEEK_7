@@ -42,6 +42,7 @@ def main():
     np.save(EMBED_SAVE_PATH, embeddings)
 
     print("Building FAISS index...")
+    embeddings = np.array(embeddings).astype("float32")
     build_faiss_index(embeddings, INDEX_SAVE_PATH)
 
     print("✔ Documents loaded")
@@ -58,11 +59,11 @@ def query_text(query, top_k=5):
     """
     # Load FAISS index
     index = load_faiss_index(INDEX_SAVE_PATH)
-    embeddings = np.load(EMBED_SAVE_PATH)
     embedder = Embedder()
 
     # Embed query
     query_embedding = embedder.embed([query])[0]
+    query_embedding = np.array(query_embedding).astype("float32")
 
     # Retrieve top_k chunks
     scores, indices = search_faiss_index(index, query_embedding, top_k=top_k)

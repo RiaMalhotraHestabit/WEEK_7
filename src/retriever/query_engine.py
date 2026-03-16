@@ -1,7 +1,6 @@
 import json
 import numpy as np
 import faiss
-
 from src.embeddings.embedder import Embedder
 
 
@@ -28,8 +27,8 @@ class QueryEngine:
         print(f"\nQuery: {query}")
 
         query_embedding = self.embedder.embed([query])
-
-        distances, indices = self.index.search(query_embedding, self.top_k)
+        embeddings = np.array(query_embedding).astype("float32")
+        _,indices = self.index.search(embeddings, self.top_k)
 
         results = []
         for idx in indices[0]:
@@ -50,8 +49,8 @@ if __name__ == "__main__":
         results = engine.search(query)
 
         print("\nTop Results:\n")
-        for i, result in enumerate(results):
-            print(f"Result {i+1}:")
+        for i, result in enumerate(results, start=1):
+            print(f"Result {i}:")
             print(f"Source: {result['metadata']['source']}")
             print(f"Page: {result['metadata']['page']}")
             print(f"Chunk ID: {result['metadata']['chunk_id']}")

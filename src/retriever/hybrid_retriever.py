@@ -5,7 +5,7 @@ from rank_bm25 import BM25Okapi
 
 from src.embeddings.embedder import Embedder
 from src.retriever.reranker import Reranker
-
+# from src.pipelines.context_builder import ContextBuilder
 
 CHUNKS_PATH = "src/data/chunks/chunks.json"
 INDEX_PATH = "src/data/vectorstore/index.faiss"
@@ -121,4 +121,12 @@ if __name__ == "__main__":
         print(f"\nResult {i+1}")
         print(r["metadata"])
         print(r["text"][:300])
+    # print("\nNumber of retrieved chunks:", len(results))
+    # builder = ContextBuilder(max_tokens=2000)
+    # context, sources = builder.build(results)
 
+    # print("\nCONTEXT:\n")
+    # print(context)
+    # print("\n" + "="*80)
+    # print("\nSOURCES:")
+    # print(sources)

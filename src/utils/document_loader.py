@@ -14,9 +14,7 @@ def load_pdf(file_path: str):
             break
 
     if year is None:
-        year = "2023"  # fallback default
-
-    # You can customize type detection logic later
+        year = "2023"
     doc_type = "proxy_statement"
     for page_number, page in enumerate(reader.pages):
         text = page.extract_text()
@@ -24,7 +22,7 @@ def load_pdf(file_path: str):
             documents.append({
                 "text": text,
                 "metadata": {
-                    "source": os.path.basename(file_path),
+                    "source": filename,
                     "page": page_number + 1,
                     "year": year,
                     "type": doc_type

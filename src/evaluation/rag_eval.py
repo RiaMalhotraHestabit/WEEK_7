@@ -1,8 +1,8 @@
 import os
 import json
-from retriever.hybrid_retriever import query_hybrid_text
-from pipelines.image_ingest import query_image
-from pipelines.sql_pipeline import query_sql
+from src.retriever.hybrid_retriever import query_hybrid_text
+from src.pipelines.image_ingest import query_image
+from src.pipelines.sql_pipeline import query_sql
 
 LOG_FILE = "EVAL-LOGS.json"
 
@@ -17,11 +17,11 @@ test_cases = [
     },
     {
         "mode": "Image",
-        "query": "src/data/raw/images/bar_chart_1.png"  # Replace with a real image path
+        "query": "src/data/raw/images/bar_chart_1.png" 
     },
     {
         "mode": "SQL",
-        "query": "How many customers have a balance over 1000?"
+        "query": "How many customers are from USA?"
     }
 ]
 

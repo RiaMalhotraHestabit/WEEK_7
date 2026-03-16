@@ -11,8 +11,13 @@ class ContextBuilder:
             text = chunk["text"]
             metadata = chunk["metadata"]
 
-            if total_length + len(text) > self.max_tokens:
+            remaining_space = self.max_tokens - total_length
+
+            if remaining_space <= 0:
                 break
+
+            # truncate text if needed
+            text = text[:remaining_space]
 
             context += (
                 f"\n\n[Source: {metadata['source']} | "
@@ -20,9 +25,11 @@ class ContextBuilder:
                 f"Year: {metadata['year']} | "
                 f"Type: {metadata['type']}]\n"
             )
+
             context += text
 
             sources.append(metadata)
+
             total_length += len(text)
 
         return context.strip(), sources
